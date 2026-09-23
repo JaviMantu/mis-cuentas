@@ -1,0 +1,2 @@
+{ "id": "claude-md", "stage": "3-build",
+  "checks": [{ "type": "maxLines", "file": "CLAUDE.md", "max": 60 }] }

@@ -1,0 +1,2 @@
+{ "id": "traceability", "stage": "4-test",
+  "checks": [{ "type": "traceability" }] }

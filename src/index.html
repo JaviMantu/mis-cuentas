@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Mis Cuentas</title>
+  <meta name="description" content="Tus cuentas en un vistazo, tus pagos en un toque.">
+  <meta name="theme-color" content="#6600AE">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    // Misma regla que domain/device.js (uiFor), antes del primer pintado. AC-006.1 y AC-006.2 prueban que coinciden.
+    (function () {
+      var q = new URLSearchParams(location.search).get('ui'), o = null;
+      try { o = q || localStorage.getItem('mis-cuentas:ui'); } catch (e) { o = q; }
+      var d = matchMedia('(hover: hover) and (pointer: fine)').matches && innerWidth >= 900;
+      document.documentElement.dataset.ui = o === 'desktop' || o === 'mobile' ? o : (d ? 'desktop' : 'mobile');
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Sprite de íconos propio (work/005): trazo 2 px, sin librería. -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.5 12 4l8.5 6.5V19a1 1 0 0 1-1 1H15v-5.5H9V20H4.5a1 1 0 0 1-1-1z"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-in" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M10 11v6M14 11v6M6.5 7l1 12a1.5 1.5 0 0 0 1.5 1.4h6a1.5 1.5 0 0 0 1.5-1.4l1-12M9.5 7V4.8a.8.8 0 0 1 .8-.8h3.4a.8.8 0 0 1 .8.8V7"/></symbol>
+      <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M9 16a4.5 4.5 0 0 1 6 0"/><path d="M12 19.5h.01"/></symbol>
+      <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 7V5.5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2V7M3 12.5h18"/></symbol>
+      <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.3 10.6a1.2 1.2 0 0 0 1.2.9h8.8a1.2 1.2 0 0 0 1.1-.8L20.5 8H6"/><path d="M9.5 20h.01M17 20h.01"/></symbol>
+      <symbol id="i-car" viewBox="0 0 24 24"><path d="M4 16.5V13l2-5.5h12l2 5.5v3.5zM4 16.5V19M20 16.5V19M7.5 13h.01M16.5 13h.01"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9-9.5A4.7 4.7 0 0 1 12 7a4.7 4.7 0 0 1 9 3.5C19.5 15.4 12 20 12 20z"/></symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2.5 4.5 13.5h6.5l-1 8 8.5-11h-6.5z"/></symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12V4.5a1 1 0 0 1 1-1H12l8.5 8.5-8.5 8.5z"/><path d="M8 8h.01"/></symbol>
+      <symbol id="i-cash" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.8"/><path d="M6 9.5h.01M18 14.5h.01"/></symbol>
+      <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9.5 12 4l9 5.5M5 10v7.5M9.7 10v7.5M14.3 10v7.5M19 10v7.5M3 20h18"/></symbol>
+      <symbol id="i-card" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6.5 15h4"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.5h2"/></symbol>
+      <symbol id="i-desktop" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></symbol>
+      <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20"/></symbol>
+      <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 0 1 3-3h12M16 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H5M8 21l-3-3 3-3"/></symbol>
+      <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3.5" y="8" width="17" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12M12 8c-2-3.5-6-3.5-6-1s3 1 6 1c3 0 6 1.5 6-1s-4-2.5-6 1"/></symbol>
+      <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></symbol>
+      <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19V9M10 13h4"/></symbol>
+      <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7.5h14.5a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5.5a1.5 1.5 0 0 1-1.5-1.5V6.5A2.5 2.5 0 0 1 6.5 4H17"/><path d="M16.5 14h.01"/></symbol>
+    </defs>
+  </svg>
+
+  <h1 class="sr-only">Mis Cuentas</h1>
+
+  <nav class="dock" aria-label="Principal">
+    <div class="rail-brand" aria-hidden="true"><svg class="ico"><use href="#i-wallet"/></svg><span>Mis Cuentas</span></div>
+    <button id="nuevo-gasto" class="fab" aria-label="+ Gasto">
+      <span class="fab-disc"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg></span><span class="fab-label">Gasto</span>
+    </button>
+    <div class="tabs" role="tablist" aria-label="Secciones">
+      <button role="tab" id="t-resumen" aria-controls="resumen" aria-selected="true"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg><span>Resumen</span></button>
+      <button role="tab" id="t-mes" aria-controls="mes" aria-selected="false" tabindex="-1"><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg><span>Mes</span></button>
+      <button role="tab" id="t-presupuesto" aria-controls="presupuesto" aria-selected="false" tabindex="-1"><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg><span>Presupuesto</span></button>
+      <button role="tab" id="t-ajustes" aria-controls="ajustes" aria-selected="false" tabindex="-1"><svg class="ico" aria-hidden="true"><use href="#i-cog"/></svg><span>Ajustes</span></button>
+    </div>
+    <div class="rail-foot only-desktop">
+      <p class="shortcuts" aria-hidden="true"><kbd>G</kbd> gasto · <kbd>I</kbd> ingreso · <kbd>1</kbd>–<kbd>4</kbd> secciones</p>
+      <button class="btn btn-quiet btn-block" data-ui-set="mobile"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>Vista móvil</button>
+    </div>
+  </nav>
+
+  <main class="content">
+    <!-- Resumen: la respuesta primero (PRODUCT.md, principio 1). -->
+    <section id="resumen" class="panel panel-resumen" role="tabpanel" aria-labelledby="t-resumen">
+      <section id="onboarding" class="onboarding" aria-labelledby="ob-titulo" hidden></section>
+      <header class="hero">
+        <p class="hero-month" id="mes-actual"></p>
+        <p class="hero-label">Balance total</p>
+        <output id="total" class="hero-balance" aria-label="Balance total"></output>
+        <p id="pendiente" class="hero-line"></p>
+        <div id="barra" class="bar" aria-hidden="true"></div>
+        <div class="hero-actions">
+          <button id="nuevo-ingreso" class="pill pill-on-hero"><svg class="ico" aria-hidden="true"><use href="#i-in"/></svg>+ Ingreso</button>
+          <button class="pill pill-ghost-hero" data-goto="t-mes"><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>Ver el mes</button>
+        </div>
+      </header>
+
+      <div id="vacio" class="empty" hidden>
+        <svg class="empty-art" viewBox="0 0 160 110" aria-hidden="true">
+          <rect x="30" y="18" width="100" height="62" rx="12" class="art-card art-card-back"/>
+          <rect x="22" y="30" width="116" height="68" rx="14" class="art-card"/>
+          <rect x="22" y="48" width="116" height="10" class="art-stripe"/>
+          <circle cx="116" cy="80" r="7" class="art-dot"/>
+        </svg>
+        <h2>Tus cuentas, en un vistazo</h2>
+        <p>Configura tus cuentas y tus fijos en cuatro pasos, o mira cómo se ve con un mes de ejemplo.</p>
+        <div class="empty-actions">
+          <button class="btn btn-primary" data-reonboard>Configurar en 1 minuto</button>
+          <button id="demo" class="btn btn-quiet" data-demo>Cargar datos de ejemplo</button>
+        </div>
+      </div>
+
+      <section class="block block-accounts" aria-labelledby="h-cuentas">
+        <div class="block-head"><h2 id="h-cuentas">Cuentas</h2></div>
+        <ul id="cuentas" class="accounts" aria-label="Cuentas"></ul>
+      </section>
+
+      <section class="block block-next" aria-labelledby="h-proximos">
+        <div class="block-head"><h2 id="h-proximos">Próximos pagos</h2><button class="link" data-goto="t-mes">Ver todo<svg class="ico" aria-hidden="true"><use href="#i-chevron"/></svg></button></div>
+        <ul id="proximos" class="rows" aria-label="Próximos pagos"></ul>
+        <p id="proximos-vacio" class="note" hidden></p>
+      </section>
+
+      <section class="block block-recent only-desktop" aria-labelledby="h-recientes">
+        <div class="block-head"><h2 id="h-recientes">Últimos movimientos</h2></div>
+        <ul id="recientes" class="rows rows-dense" aria-label="Últimos movimientos"></ul>
+        <p id="recientes-vacio" class="note" hidden>Aún no registras movimientos.</p>
+      </section>
+    </section>
+
+    <section id="mes" class="panel" role="tabpanel" aria-labelledby="t-mes" hidden>
+      <header class="page-head"><h2 id="mes-titulo">Mes</h2><p id="mes-resumen" class="note"></p></header>
+      <div class="table-head only-desktop" role="table" aria-label="Columnas del mes"><div role="row">
+        <span class="th-ico"></span><span role="columnheader">Fecha</span><span role="columnheader">Concepto</span><span role="columnheader">Cuenta</span><span role="columnheader" class="num-col">Monto</span><span role="columnheader" class="num-col">Estado</span>
+      </div></div>
+      <ul id="ocurrencias" class="rows" aria-label="Recurrentes del mes"></ul>
+      <div id="mes-vacio" class="empty empty-compact" hidden>
+        <h3>Aún no hay pagos este mes</h3>
+        <p>Los recurrentes que agregues en Presupuesto aparecen aquí cada mes.</p>
+        <button class="btn btn-quiet" data-goto="t-presupuesto">Ir a Presupuesto</button>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="panel" role="tabpanel" aria-labelledby="t-presupuesto" hidden>
+      <header class="page-head"><h2>Presupuesto</h2><p id="presupuesto-resumen" class="note"></p></header>
+      <section class="block-templates" aria-labelledby="h-plantillas">
+        <h3 class="group-title" id="h-plantillas">Agregar un fijo</h3>
+        <div id="plantillas" class="chip-grid" role="group" aria-labelledby="h-plantillas"></div>
+      </section>
+      <form id="form-recurrente" class="card-form">
+        <input type="hidden" name="categoryId">
+        <fieldset class="seg">
+          <legend class="sr-only">Tipo de recurrente</legend>
+          <label class="chip"><input type="radio" name="kind" value="expense" checked><span>Gasto</span></label>
+          <label class="chip"><input type="radio" name="kind" value="income"><span>Ingreso</span></label>
+        </fieldset>
+        <label class="field">Nombre<input name="name" maxlength="40" autocomplete="off" placeholder="Arriendo"></label>
+        <label class="field">Valor mensual<input name="amount" inputmode="decimal" autocomplete="off" placeholder="1.200.000"></label>
+        <div class="field-row">
+          <label class="field">Día del mes<input name="day" type="number" min="1" max="31" value="1"></label>
+          <label class="field">Cuenta<select name="account" class="select-cuenta"></select></label>
+        </div>
+        <p class="error" role="alert" hidden></p>
+        <button class="btn btn-primary btn-block">Agregar recurrente</button>
+      </form>
+      <h3 class="group-title" id="h-ingresos">Ingresos</h3>
+      <ul id="rec-ingresos" class="rows" aria-labelledby="h-ingresos"></ul>
+      <h3 class="group-title" id="h-gastos">Gastos</h3>
+      <ul id="rec-gastos" class="rows" aria-labelledby="h-gastos"></ul>
+      <div class="view-switch only-mobile">
+        <button class="btn btn-quiet btn-block" data-ui-set="desktop"><svg class="ico" aria-hidden="true"><use href="#i-desktop"/></svg>Vista de escritorio</button>
+      </div>
+    </section>
+    <section id="ajustes" class="panel" role="tabpanel" aria-labelledby="t-ajustes" hidden>
+      <header class="page-head"><h2>Ajustes</h2><p class="note">Tus cuentas, tus catálogos y cómo se ve la app.</p></header>
+      <div class="settings">
+        <section class="settings-group" aria-labelledby="h-aj-cuentas">
+          <h3 id="h-aj-cuentas">Cuentas</h3>
+          <ul id="aj-cuentas" class="settings-list"></ul>
+          <form id="form-cuenta" class="settings-form">
+            <label class="field">Nombre de la cuenta<input name="name" maxlength="40" autocomplete="off" placeholder="Bancolombia, Nequi…"></label>
+            <div class="field-row">
+              <label class="field">Tipo de cuenta<select name="type" id="tipo-cuenta"></select></label>
+              <label class="field">Saldo inicial<input name="opening" inputmode="decimal" autocomplete="off" placeholder="0"></label>
+            </div>
+            <p class="error" role="alert" hidden></p>
+            <button class="btn btn-primary">Agregar cuenta</button>
+          </form>
+        </section>
+        <section class="settings-group" aria-labelledby="h-aj-catalogos">
+          <h3 id="h-aj-catalogos">Catálogos</h3>
+          <fieldset class="seg seg-3" id="aj-lista">
+            <legend class="sr-only">Catálogo</legend>
+            <label class="chip"><input type="radio" name="catlist" value="income"><span>Ingresos</span></label>
+            <label class="chip"><input type="radio" name="catlist" value="expense" checked><span>Gastos</span></label>
+            <label class="chip"><input type="radio" name="catlist" value="templates"><span>Plantillas</span></label>
+          </fieldset>
+          <ul id="aj-catalogo" class="settings-list"></ul>
+          <form id="form-catalogo" class="settings-form"></form>
+        </section>
+        <section class="settings-group" aria-labelledby="h-aj-vista">
+          <h3 id="h-aj-vista">Vista</h3>
+          <fieldset class="seg seg-3">
+            <legend class="sr-only">Vista de la app</legend>
+            <label class="chip"><input type="radio" name="ui-mode" value="auto"><span>Automático</span></label>
+            <label class="chip"><input type="radio" name="ui-mode" value="mobile"><span>Móvil</span></label>
+            <label class="chip"><input type="radio" name="ui-mode" value="desktop"><span>Escritorio</span></label>
+          </fieldset>
+          <p class="note">Automático usa la vista táctil en celulares y tablets, y la de escritorio con mouse.</p>
+        </section>
+        <section class="settings-group" aria-labelledby="h-aj-datos">
+          <h3 id="h-aj-datos">Datos</h3>
+          <p class="note">Tus datos viven solo en este navegador.</p>
+          <div id="aj-reset"><button class="btn btn-quiet" data-reset-ask>Empezar de cero</button></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- Movimiento rápido: bottom sheet. Excepción justificada al «modal como primera opción» en design-brief.md. -->
+  <dialog id="rapido" class="sheet" aria-labelledby="rapido-titulo">
+    <form id="form-rapido">
+      <div class="grab" aria-hidden="true"></div>
+      <h2 id="rapido-titulo">Nuevo gasto</h2>
+      <fieldset class="seg">
+        <legend class="sr-only">Tipo de movimiento</legend>
+        <label class="chip"><input type="radio" name="kind" value="expense" checked><span>Gasto</span></label>
+        <label class="chip"><input type="radio" name="kind" value="income"><span>Ingreso</span></label>
+      </fieldset>
+      <fieldset class="chips chips-scroll" id="rapido-categorias"><legend>Categoría</legend></fieldset>
+      <label class="amount">Monto<input name="amount" inputmode="decimal" autocomplete="off" placeholder="0"></label>
+      <button type="button" id="mismo-monto" class="quiet-btn" hidden></button>
+      <fieldset class="chips" id="rapido-cuentas"><legend>Cuenta</legend></fieldset>
+      <label class="field">Nota<input name="note" maxlength="60" autocomplete="off" placeholder="Opcional"></label>
+      <p class="error" role="alert" hidden></p>
+      <div class="form-actions">
+        <button type="button" id="cancelar" class="btn btn-quiet">Cancelar</button>
+        <button id="guardar" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden>
+    <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><span id="toast-text"></span>
+    <button id="toast-undo" class="toast-undo"><svg class="ico" aria-hidden="true"><use href="#i-undo"/></svg>Deshacer</button>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

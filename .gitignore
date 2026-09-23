@@ -30,3 +30,9 @@ __pycache__/
 tmp/
 .validation/
 .playwright-mcp/
+
+# Playwright
+test-results/
+playwright-report/
+# Vercel
+.vercel/

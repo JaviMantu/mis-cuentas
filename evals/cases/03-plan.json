@@ -1,0 +1,2 @@
+{ "id": "plan", "stage": "3-build",
+  "checks": [{ "type": "sections", "file": "plan.md", "sections": ["Archivos que cambian", "Orden de trabajo", "Riesgos", "Cómo se prueba que funciona"] }] }

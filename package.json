@@ -1,0 +1,14 @@
+{
+  "name": "mis-cuentas",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "make check"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

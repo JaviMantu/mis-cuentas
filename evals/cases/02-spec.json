@@ -1,0 +1,5 @@
+{ "id": "spec", "stage": "2-design",
+  "prompt": "Usa la skill intent-to-spec para convertir el intent más reciente de work/ en spec.md.",
+  "checks": [
+    { "type": "sections", "file": "spec.md", "sections": ["Requisitos", "Diseño", "Criterios de aceptación", "Preocupaciones señaladas"] },
+    { "type": "criteria" } ] }

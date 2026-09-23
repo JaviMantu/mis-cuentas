@@ -1,0 +1,5 @@
+{ "id": "ui-quality", "stage": "2-design",
+  "note": "Cadena derivada de UI: brief completo y leyes de ui-quality en src/.",
+  "checks": [
+    { "type": "sections", "file": "design-brief.md", "sections": ["Resumen", "Acción primaria", "Dirección", "Alcance", "Layout", "Estados", "Interacción", "Contenido"] },
+    { "type": "forbid", "dir": "src", "pattern": "background-clip:\\s*text|border-(left|right):\\s*[2-9]px|—" } ] }

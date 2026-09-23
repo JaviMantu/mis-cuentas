@@ -1,0 +1,3 @@
+{ "id": "intent", "stage": "1-plan",
+  "prompt": "Ejecuta `make nuevo NOMBRE=exportar-csv` y completa el intent.md resultante para: exportar mis movimientos a CSV. Usa la plantilla sin quitar secciones.",
+  "checks": [{ "type": "sections", "file": "intent.md", "sections": ["Problema", "Resultado esperado", "Usuarios y sistemas afectados", "Restricciones", "Fuera de alcance", "Preguntas abiertas"] }] }

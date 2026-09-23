@@ -1,0 +1,2 @@
+{ "id": "money-safety", "stage": "3-build",
+  "checks": [{ "type": "forbid", "dir": "src", "pattern": "parseFloat|toFixed\\(|\\* ?100\\b" }] }

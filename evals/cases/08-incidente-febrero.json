@@ -1,0 +1,4 @@
+{ "id": "inc-febrero", "stage": "6-maintain",
+  "note": "Incidente work/002 convertido en eval permanente: un recurrente del 31 nunca cae en el mes siguiente.",
+  "checks": [{ "type": "cmd", "label": "día 31 en febrero → 2026-02-28", "when": "src/domain/budget.js",
+    "run": "node --input-type=module -e \"import {occurrencesFor} from './src/domain/budget.js'; const [o]=occurrencesFor([{id:'x',name:'x',kind:'expense',amount:1,day:31,account:'a'}],2026,2); if(o.date!=='2026-02-28'){console.error('fecha '+o.date);process.exit(1)}\"" }] }
