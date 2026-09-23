@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# pre-commit — regenera mirrors (AGENTS/GEMINI) SOLO en main y SOLO si el commit toca CLAUDE.md.
+# En ramas worktree no regenera (evita churn/colisión).
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo '')"
+if [ "$BRANCH" = "main" ] && git diff --cached --name-only | grep -q '^CLAUDE\.md$'; then
+  if [ -x "$ROOT/scripts/sync-mirrors.sh" ]; then
+    "$ROOT/scripts/sync-mirrors.sh" >/dev/null 2>&1 || true
+    git add -- AGENTS.md GEMINI.md 2>/dev/null || true
+  fi
+fi
+exit 0
