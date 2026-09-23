@@ -2,7 +2,7 @@
 
 Finanzas personales guiadas: configura tus cuentas y tus fijos en 4 pasos, marca lo pagado en un toque y ve cuánto te queda. Los datos nunca salen de tu navegador.
 
-- **App:** _URL de producción al completar work/008_
+- **App:** https://mis-cuentas-kappa.vercel.app (Vercel Hobby · cada PR tiene su preview · producción = merge a `main`)
 - **Cómo nació:** en el harness [`ai-native-sdlc`](../ai-native-sdlc) de Amaris, siguiendo el AI-Native SDLC. Allí queda el ejemplo congelado en 007; este repo es su **continuación consolidada y publicada**.
 
 ## Cómo se trabaja aquí
