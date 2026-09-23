@@ -1,6 +1,1 @@
-{ "id": "gates", "stage": "5-deploy",
-  "checks": [
-    { "type": "hook", "hook": ".claude/hooks/production-gate.sh", "stdin": { "tool_input": { "command": "make deploy ENV=prod" } }, "exit": 2 },
-    { "type": "hook", "hook": ".claude/hooks/production-gate.sh", "stdin": { "tool_input": { "command": "make deploy ENV=prod" } }, "env": { "RELEASE_APPROVED": "1" }, "exit": 0 },
-    { "type": "hook", "hook": ".claude/hooks/protect-tests.sh", "stdin": { "tool_input": { "file_path": "tests/unit/x.test.js" } }, "env": { "FIX_MODE": "1" }, "exit": 2 },
-    { "type": "hook", "hook": ".claude/hooks/no-secrets.sh", "stdin": { "tool_input": { "content": "key=AKIAABCDEFGHIJKLMNOP" } }, "exit": 2 } ] }
+{"id": "gates", "stage": "5-deploy", "checks": [{"type": "hook", "hook": ".claude/hooks/protect-tests.sh", "stdin": {"tool_input": {"file_path": "tests/unit/x.test.js"}}, "env": {"FIX_MODE": "1"}, "exit": 2}, {"type": "hook", "hook": ".claude/hooks/no-secrets.sh", "stdin": {"tool_input": {"content": "key=AKIAABCDEFGHIJKLMNOP"}}, "exit": 2}]}

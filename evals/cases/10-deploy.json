@@ -1,0 +1,7 @@
+{ "id": "deploy", "stage": "5-deploy",
+  "note": "work/008: vercel.json + CSP por hash y los atajos a producción cerrados.",
+  "checks": [
+    { "type": "cmd", "label": "vercel.json y CSP en regla", "when": "vercel.json", "run": "node scripts/check-deploy.mjs" },
+    { "type": "hook", "hook": ".claude/hooks/production-gate.sh", "stdin": { "tool_input": { "command": "vercel --prod" } }, "exit": 2 },
+    { "type": "hook", "hook": ".claude/hooks/production-gate.sh", "stdin": { "tool_input": { "command": "git push origin main" } }, "exit": 2 },
+    { "type": "hook", "hook": ".claude/hooks/production-gate.sh", "stdin": { "tool_input": { "command": "git push origin feat/x" } }, "exit": 0 } ] }

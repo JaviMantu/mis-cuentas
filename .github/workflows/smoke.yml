@@ -1,0 +1,18 @@
+# work/008 · AC-008.2 y AC-008.3: cuando Vercel termina un despliegue (preview o producción), el smoke lo prueba.
+name: smoke
+on: deployment_status
+jobs:
+  smoke:
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.deployment.sha }}" }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: make smoke URL=${{ github.event.deployment_status.target_url }}
+        env:
+          # Solo si el proyecto protege sus previews: Vercel → Settings → Deployment Protection → Protection Bypass for Automation.
+          VERCEL_BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
