@@ -49,3 +49,12 @@ test('AC-008.5 el hook cierra los atajos del agente a producción', () => {
   assert.equal(gate('vercel deploy'), 0, 'un preview está permitido');
   assert.equal(gate('vercel --prod', { RELEASE_APPROVED: '1' }), 0);
 });
+
+test('AC-008.6 el agente no hace merge ni aprueba: el merge a producción es humano', () => {
+  assert.equal(gate('gh pr merge 1 --squash'), 2);
+  assert.equal(gate('gh pr review 1 --approve'), 2);
+  assert.equal(gate('gh api -X PUT repos/JaviMantu/mis-cuentas/pulls/1/merge'), 2);
+  assert.equal(gate('gh pr view 1'), 0);
+  assert.equal(gate('gh pr review 1 --comment -b "hallazgos"'), 0, 'comentar una review sí puede');
+  assert.equal(gate('gh pr merge 1 --squash', { RELEASE_APPROVED: '1' }), 0);
+});
