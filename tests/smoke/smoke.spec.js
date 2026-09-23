@@ -9,6 +9,8 @@ test('AC-008.2 la app desplegada abre el onboarding, sin errores ni terceros y c
   page.on('request', r => { const u = new URL(r.url()); if (/^https?:$/.test(u.protocol) && u.origin !== origin) foreign.push(r.url()); });
 
   const res = await page.goto('/');
+  // Un preview con Vercel Authentication redirige al login de Vercel: eso no es la app (lección del primer PR de work/008).
+  expect(new URL(page.url()).origin, 'el despliegue está protegido: configura VERCEL_AUTOMATION_BYPASS_SECRET (Deployment Protection → Protection Bypass for Automation)').toBe(origin);
   expect(res.status()).toBe(200);
   const h = res.headers();
   expect(h['content-security-policy']).toMatch(/default-src 'self'/);
